@@ -1,25 +1,37 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
+using NAudio.Lame;
+using NAudio.Wave;
 
 namespace Audio
 {
     public enum CompressionFormat
     {
-        GZip
+        GZip,
+        MP3
     }
 
     public static class WaveFile
     {
-        private static string _waveFileName, _gzipFileName;
+        private static string _waveFileName, _targetFileName;
         private static FileInfo _fileInfo;
 
-        public static void Compress(CompressionFormat compressionFormat, string waveFileName, string gzipFileName)
+        public static void Compress(CompressionFormat compressionFormat, string waveFileName, string targetFileName)
         {
             _waveFileName = waveFileName;
-            _gzipFileName = gzipFileName;
+            _targetFileName = targetFileName;
             _fileInfo = new FileInfo(waveFileName);
             if (compressionFormat == CompressionFormat.GZip) CompressToGZip();
+            if (compressionFormat == CompressionFormat.MP3) CompressToMP3();
+        }
+
+        private static void CompressToMP3()
+        {
+            var bitRate = 128;
+            using (var reader = new AudioFileReader(_waveFileName))
+            using (var writer = new LameMP3FileWriter(_targetFileName, reader.WaveFormat, bitRate)) reader.CopyTo(writer);
         }
 
         private static void CompressToGZip()

@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GZipFile.cs" />
+    <Compile Include="MP3File.cs" />
     <Compile Include="WaveFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

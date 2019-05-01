@@ -43,5 +43,31 @@ namespace TestAudio
             var msg = $"Decompressed {sourceFileInfo.Name} from {sourceFileInfo.Length.ToString()} to {targetFileInfo.Length.ToString()} bytes.";
             MessageBox.Show(msg, Text);
         }
+
+        private void compressWaveToMP3Button_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog { Title = "Select a Wave File", CheckFileExists = true, CheckPathExists = true, DefaultExt = "wav", Filter = "wav files (*.wav)|*.wav", RestoreDirectory = true };
+            if (dialog.ShowDialog() != DialogResult.OK) return;
+            var waveFileName = dialog.FileName;
+            var targetFile = waveFileName + ".mp3";
+            WaveFile.Compress(CompressionFormat.MP3, waveFileName, targetFile);
+            FileInfo sourceFileInfo = new FileInfo(waveFileName);
+            FileInfo targetFileInfo = new FileInfo(targetFile);
+            var msg = $"Compressed {sourceFileInfo.Name} from {sourceFileInfo.Length.ToString()} to {targetFileInfo.Length.ToString()} bytes.";
+            MessageBox.Show(msg, Text);
+        }
+
+        private void decompressMP3toWaveButton_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog { Title = "Select a MP3 File", CheckFileExists = true, CheckPathExists = true, DefaultExt = "mp3", Filter = "MP3 files (*.mp3)|*.mp3", RestoreDirectory = true };
+            if (dialog.ShowDialog() != DialogResult.OK) return;
+            var sourceFileName = dialog.FileName;
+            var waveFileName = sourceFileName + ".wav";
+            MP3File.Decompress(DecompressionFormat.Wave, sourceFileName, waveFileName);
+            FileInfo sourceFileInfo = new FileInfo(sourceFileName);
+            FileInfo targetFileInfo = new FileInfo(waveFileName);
+            var msg = $"Decompressed {sourceFileInfo.Name} from {sourceFileInfo.Length.ToString()} to {targetFileInfo.Length.ToString()} bytes.";
+            MessageBox.Show(msg, Text);
+        }
     }
 }
